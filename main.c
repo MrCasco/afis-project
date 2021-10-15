@@ -48,23 +48,23 @@ void liberarArregloMinucias(ArregloMinucias* queuePtr) {
   ult_minucia = 0;
 }
 
-void devolverTipoMinucia(ArregloMinucias* queuePtr) {
-    uint8_t num =  queuePtr->arr[ult_minucia].tipo;
-    uint8_t x;
-    x = num & 0x3;
-
-    if(x == 0){
-        printf("Terminacion");
-    }
-    if(x == 1){
-        printf("Division");
-    }
-    if(x == 2){
-        printf("Punto");
-    }
-    if(x == 3){
-        printf("Desconocido");
-    }
+void devolverTipoMinucia(Minucia* minucia){
+uint8_t num = queuePtr->arr[ult_minucia].tipo;
+printf("%x\n", num);
+uint8_t x;
+x = num >> 6;
+if(x == 0){
+    printf("Terminacion");
+}
+if(x == 1){
+    printf("Division");
+}
+if(x == 2){
+    printf("Punto");
+}
+if(x == 3){
+    printf("Desconocido");
+}
 }
 
 float calcularDistancia(int a, int b) {
