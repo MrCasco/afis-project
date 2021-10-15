@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <stdint.h>
 
 int ult_minucia = 0;
 
@@ -18,11 +19,27 @@ typedef struct {
 
 ArregloMinucias *queuePtr;
 
+Minucia *crearMinucia(int x, int y, float angulo, int tipo) {
+  queuePtr->arr[ult_minucia].x = x;
+  queuePtr->arr[ult_minucia].y = y;
+  queuePtr->arr[ult_minucia].angulo = angulo;
+  queuePtr->arr[ult_minucia].tipo = tipo;
+  ult_minucia++;
+}
+
 ArregloMinucias *crearArregloMinucias(int n) {
   ArregloMinucias* queuePtr = (ArregloMinucias*)malloc(sizeof(ArregloMinucias));
   queuePtr->arr = (Minucia*)calloc(n, sizeof(Minucia));
   queuePtr->longitud = n;
   return queuePtr;
+}
+
+void inicializarMinucias() {
+  int n = queuePtr->longitud;
+  for (int i = 0; i < n; i++) {
+    crearMinucia(0, 0, 0.0, 0);
+    ult_minucia = 0;
+  }
 }
 
 void liberarArregloMinucias(ArregloMinucias* queuePtr) {
@@ -31,17 +48,10 @@ void liberarArregloMinucias(ArregloMinucias* queuePtr) {
   ult_minucia = 0;
 }
 
-Minucia *crearMinucia(int x, int y, float angulo, int tipo) {
-  queuePtr->arr[ult_minucia].x = x;
-  queuePtr->arr[ult_minucia].y = y;
-  queuePtr->arr[ult_minucia].angulo = angulo;
-  queuePtr->arr[ult_minucia].tipo = tipo;
-  ult_minucia++;
-}
-void devolverTipoMinucia(ArregloMinucias* queuePtr){
+void devolverTipoMinucia(ArregloMinucias* queuePtr) {
     uint8_t num =  queuePtr->arr[ult_minucia].tipo;
     uint8_t x;
-    x= num & 0x3;
+    x = num & 0x3;
 
     if(x == 0){
         printf("Terminacion");
@@ -57,7 +67,7 @@ void devolverTipoMinucia(ArregloMinucias* queuePtr){
     }
 }
 
-float calcularDistancia(int a, int b){
+float calcularDistancia(int a, int b) {
     int ax = queuePtr->arr[a].x;        int bx = queuePtr->arr[b].x;
     int ay = queuePtr->arr[a].y;        int by = queuePtr->arr[b].y;
     float ao = queuePtr->arr[a].angulo; float bo = queuePtr->arr[b].angulo;
@@ -67,7 +77,7 @@ float calcularDistancia(int a, int b){
     return sqrt(abx+aby+abo);
 }
 
-int encontrarCentroide(){
+int encontrarCentroide() {
     float arr[ult_minucia];
     int i = 0;
     int j = 0;
@@ -75,7 +85,7 @@ int encontrarCentroide(){
     for(i = 0; i < ult_minucia; i++){
         sumDist = 0;
         for(j = 0; j < ult_minucia; j++){
-            sumDist += calcularDistancia(i,j);
+            sumDist += calcularDistancia(i, j);
         }
         arr[i] = sumDist;
     }
@@ -90,13 +100,14 @@ int encontrarCentroide(){
     return arr[minp];
 }
 
-int main(){
+int main() {
   queuePtr = crearArregloMinucias(5);
+  inicializarMinucias();
   crearMinucia(1, 0, 45.0, 0x00);
   crearMinucia(-1, 0, 45.0, 0x00);
   crearMinucia(0, 1, 45.0, 0x00);
   crearMinucia(0, -1, 45.0, 0x00);
   crearMinucia(0, 0, 45.0, 0x00);
-  encontrarCentroide();
+  printf("%d", encontrarCentroide());
   return 0;
 }
