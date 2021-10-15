@@ -9,7 +9,7 @@ int ult_minucia = 0;
 typedef struct {
   int x, y;
   float angulo;
-  int tipo;
+  uint8_t tipo;
 } Minucia;
 
 typedef struct {
@@ -49,22 +49,20 @@ void liberarArregloMinucias(ArregloMinucias* queuePtr) {
 }
 
 void devolverTipoMinucia(Minucia* minucia){
-uint8_t num = queuePtr->arr[ult_minucia].tipo;
-printf("%x\n", num);
-uint8_t x;
-x = num >> 6;
-if(x == 0){
-    printf("Terminacion");
-}
-if(x == 1){
-    printf("Division");
-}
-if(x == 2){
-    printf("Punto");
-}
-if(x == 3){
-    printf("Desconocido");
-}
+  uint8_t num = minucia->tipo;
+  uint8_t x = (num >> 6) & 0x3;
+  if(x == 0){
+    printf("Terminacion\n");
+  }
+  if(x == 1){
+    printf("Division\n");
+  }
+  if(x == 2){
+    printf("Punto\n");
+  }
+  if(x == 3){
+    printf("Desconocido\n");
+  }
 }
 
 float calcularDistancia(int a, int b) {
@@ -103,11 +101,27 @@ int encontrarCentroide() {
 int main() {
   queuePtr = crearArregloMinucias(5);
   inicializarMinucias();
-  crearMinucia(1, 0, 45.0, 0x00);
-  crearMinucia(-1, 0, 45.0, 0x00);
-  crearMinucia(0, 1, 45.0, 0x00);
+  crearMinucia(1, 0, 45.0, 0x40);
+  crearMinucia(-1, 0, 45.0, 0x80);
+  crearMinucia(0, 1, 45.0, 0xc0);
   crearMinucia(0, -1, 45.0, 0x00);
   crearMinucia(0, 0, 45.0, 0x00);
+
+  Minucia m1 = queuePtr->arr[0];
+  Minucia m2 = queuePtr->arr[1];
+  Minucia m3 = queuePtr->arr[2];
+  Minucia m4 = queuePtr->arr[3];
+
+  // m1.tipo = División
+  devolverTipoMinucia(&m1);
+  // m2.tipo = Punto
+  devolverTipoMinucia(&m2);
+  // m3.tipo = Desconocido
+  devolverTipoMinucia(&m3);
+  // m4.tipo = Terminación
+  devolverTipoMinucia(&m4);
+
+  // Encontrar centroide
   printf("%d", encontrarCentroide());
   return 0;
 }
