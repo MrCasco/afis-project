@@ -39,8 +39,46 @@ Minucia *crearMinucia(int x, int y, float angulo, int tipo) {
   ult_minucia++;
 }
 
+float calcularDistancia(int a, int b){
+    int ax = queuePtr->arr[a].x;        int bx = queuePtr->arr[b].x;
+    int ay = queuePtr->arr[a].y;        int by = queuePtr->arr[b].y;
+    float ao = queuePtr->arr[a].angulo; float bo = queuePtr->arr[b].angulo;
+    int abx = (ax-bx)*(ax-bx);
+    int aby = (ay-by)*(ay-by);
+    float abo = (ao-bo)*(ao-bo);
+    return sqrt(abx+aby+abo);
+}
+
+int encontrarCentroide(){
+    float arr[ult_minucia];
+    int i = 0;
+    int j = 0;
+    float sumDist;
+    for(i = 0; i < ult_minucia; i++){
+        sumDist = 0;
+        for(j = 0; j < ult_minucia; j++){
+            sumDist += calcularDistancia(i,j);
+        }
+        arr[i] = sumDist;
+    }
+    float min = 999999;
+    int minp;
+    for(i = 0; i < ult_minucia; i++){
+        if(arr[i] < min){
+            min = arr[i];
+            minp = i;
+        }
+    }
+    return arr[minp];
+}
+
 int main(){
-  queuePtr = crearArregloMinucias(3);
+  queuePtr = crearArregloMinucias(5);
+  crearMinucia(1, 0, 45.0, 0x00);
+  crearMinucia(-1, 0, 45.0, 0x00);
+  crearMinucia(0, 1, 45.0, 0x00);
+  crearMinucia(0, -1, 45.0, 0x00);
   crearMinucia(0, 0, 45.0, 0x00);
+  encontrarCentroide();
   return 0;
 }
